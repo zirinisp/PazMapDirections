@@ -100,7 +100,7 @@ public enum PazNavigationApp {
         return UIApplication.shared.openURL(url)
     }
     
-    public class func directionsAlertController(coordinate: CLLocationCoordinate2D, name: String = "Destination", title: String = "Directions Using", message: String? = nil, completion: ((Bool) -> Swift.Void)? = nil) -> UIAlertController {
+    public static func directionsAlertController(coordinate: CLLocationCoordinate2D, name: String = "Destination", title: String = "Directions Using", message: String? = nil, completion: ((Bool) -> Swift.Void)? = nil) -> UIAlertController {
         let directionsAlertView = UIAlertController(title: title, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         for navigationApp in PazNavigationApp.AvailableServices {
             directionsAlertView.addAction(UIAlertAction(title: navigationApp.name, style: UIAlertActionStyle.default, handler: { (action) in
