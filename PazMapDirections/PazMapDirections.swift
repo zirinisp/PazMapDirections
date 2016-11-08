@@ -83,7 +83,7 @@ public enum PazNavigationApp {
         case .GoogleMaps:
             urlString.append("?saddr=&daddr=\(coordinate.latitude),\(coordinate.longitude)&directionsmode=driving")
         case .Navigon:
-            urlString.append("coordinate/\(name)/\(coordinate.latitude)/\(coordinate.longitude)")
+            urlString.append("coordinate/\(coordinate.latitude)/\(coordinate.longitude)")
         case .TomTom:
             urlString.append("geo:action=navigateto&lat=\(coordinate.latitude)&long=\(coordinate.longitude)&name=\(name)")
         case .Waze:
