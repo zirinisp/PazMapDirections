@@ -100,4 +100,18 @@ public enum PazNavigationApp {
         return UIApplication.shared.openURL(url)
     }
     
+    public func directionsAlertController(coordinate: CLLocationCoordinate2D, name: String = "KiteSpotter", title: String = "Directions Using", message: String? = nil, completion: ((Bool) -> Swift.Void)? = nil) -> UIAlertController {
+        let directionsAlertView = UIAlertController(title: title, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        for navigationApp in PazNavigationApp.AvailableServices {
+            directionsAlertView.addAction(UIAlertAction(title: navigationApp.name, style: UIAlertActionStyle.default, handler: { (action) in
+                let success = navigationApp.openWithDirections(coordinate: coordinate, name: name)
+                completion?(success)
+            }))
+        }
+        directionsAlertView.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.cancel, handler: { (action) in
+            completion?(false)
+        }))
+        return directionsAlertView
+    }
+    
 }
