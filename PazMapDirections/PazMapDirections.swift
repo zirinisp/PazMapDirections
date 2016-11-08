@@ -99,4 +99,5 @@ public enum PazNavigationApp {
         }
         return UIApplication.shared.openURL(url)
     }
+    
 }
