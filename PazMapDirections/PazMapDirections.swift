@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import CoreLocation
+import MapKit
 
 public enum PazNavigationApp {
     case AppleMaps
@@ -20,7 +21,7 @@ public enum PazNavigationApp {
     public static let AllValues: [PazNavigationApp] = [.AppleMaps, .GoogleMaps, .Navigon, .TomTom, .Waze]
     
     public static var AvailableServices: [PazNavigationApp] {
-        var availableServices = self.AllValues
+        var availableServices = [PazNavigationApp]()
         for app in self.AllValues {
             if app.available {
                 availableServices.append(app)
@@ -65,6 +66,9 @@ public enum PazNavigationApp {
     }
     
     public var available: Bool {
+        if self == .AppleMaps {
+            return true
+        }
         guard let url = self.url else {
             return false
         }
@@ -75,7 +79,7 @@ public enum PazNavigationApp {
         var urlString = self.urlString
         switch self {
         case .AppleMaps:
-            urlString.append("?daddr=\(coordinate.latitude),\(coordinate.longitude)=d&t=h")
+            urlString.append("?q=\(coordinate.latitude),\(coordinate.longitude)=d&t=h")
         case .GoogleMaps:
             urlString.append("?saddr=&daddr=\(coordinate.latitude),\(coordinate.longitude)&directionsmode=driving")
         case .Navigon:
@@ -94,6 +98,12 @@ public enum PazNavigationApp {
     }
     
     public func openWithDirections(coordinate: CLLocationCoordinate2D, name: String = "Destination", completion: ((Bool) -> Swift.Void)? = nil) {
+        if self == .AppleMaps {
+            let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate, addressDictionary:nil))
+            mapItem.name = self.name
+            let success = mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving])
+            completion?(success)
+        }
         guard let url = self.directionsUrl(coordinate: coordinate, name: name) else {
             completion?(false)
             return
