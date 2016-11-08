@@ -93,19 +93,30 @@ public enum PazNavigationApp {
         return URL(string: urlString)
     }
     
-    public func openWithDirections(coordinate: CLLocationCoordinate2D, name: String = "Destination") -> Bool {
+    public func openWithDirections(coordinate: CLLocationCoordinate2D, name: String = "Destination", completion: ((Bool) -> Swift.Void)? = nil) {
         guard let url = self.directionsUrl(coordinate: coordinate, name: name) else {
-            return false
+            completion?(false)
+            return
         }
-        return UIApplication.shared.openURL(url)
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url, options: [:], completionHandler: {
+                (success) in
+                print("Open \(url.absoluteString): \(success)")
+                completion?(success)
+            })
+        } else {
+            let success = UIApplication.shared.openURL(url)
+            completion?(success)
+        }
     }
     
     public static func directionsAlertController(coordinate: CLLocationCoordinate2D, name: String = "Destination", title: String = "Directions Using", message: String? = nil, completion: ((Bool) -> Swift.Void)? = nil) -> UIAlertController {
         let directionsAlertView = UIAlertController(title: title, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         for navigationApp in PazNavigationApp.AvailableServices {
             directionsAlertView.addAction(UIAlertAction(title: navigationApp.name, style: UIAlertActionStyle.default, handler: { (action) in
-                let success = navigationApp.openWithDirections(coordinate: coordinate, name: name)
-                completion?(success)
+                navigationApp.openWithDirections(coordinate: coordinate, name: name, completion: { (success) in
+                    completion?(success)
+                })
             }))
         }
         directionsAlertView.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.cancel, handler: { (action) in
