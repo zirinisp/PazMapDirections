@@ -71,7 +71,7 @@ public enum PazNavigationApp {
         return UIApplication.shared.canOpenURL(url)
     }
     
-    public func directionsUrlString(coordinate: CLLocationCoordinate2D, name: String = "KiteSpotter") -> String {
+    public func directionsUrlString(coordinate: CLLocationCoordinate2D, name: String = "Destination") -> String {
         var urlString = self.urlString
         switch self {
         case .AppleMaps:
@@ -88,19 +88,19 @@ public enum PazNavigationApp {
         return urlString
     }
 
-    public func directionsUrl(coordinate: CLLocationCoordinate2D, name: String = "KiteSpotter") -> URL? {
+    public func directionsUrl(coordinate: CLLocationCoordinate2D, name: String = "Destination") -> URL? {
         let urlString = self.directionsUrlString(coordinate: coordinate, name: name)
         return URL(string: urlString)
     }
     
-    public func openWithDirections(coordinate: CLLocationCoordinate2D, name: String = "KiteSpotter") -> Bool {
+    public func openWithDirections(coordinate: CLLocationCoordinate2D, name: String = "Destination") -> Bool {
         guard let url = self.directionsUrl(coordinate: coordinate, name: name) else {
             return false
         }
         return UIApplication.shared.openURL(url)
     }
     
-    public func directionsAlertController(coordinate: CLLocationCoordinate2D, name: String = "KiteSpotter", title: String = "Directions Using", message: String? = nil, completion: ((Bool) -> Swift.Void)? = nil) -> UIAlertController {
+    public class func directionsAlertController(coordinate: CLLocationCoordinate2D, name: String = "Destination", title: String = "Directions Using", message: String? = nil, completion: ((Bool) -> Swift.Void)? = nil) -> UIAlertController {
         let directionsAlertView = UIAlertController(title: title, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         for navigationApp in PazNavigationApp.AvailableServices {
             directionsAlertView.addAction(UIAlertAction(title: navigationApp.name, style: UIAlertActionStyle.default, handler: { (action) in
