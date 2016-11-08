@@ -89,7 +89,9 @@ public enum PazNavigationApp {
         case .Waze:
             urlString.append("?ll=\(coordinate.latitude),\(coordinate.longitude)&navigate=yes")
         }
-        return urlString
+        let urlwithPercentEscapes = urlString.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed) ?? urlString
+
+        return urlwithPercentEscapes
     }
 
     public func directionsUrl(coordinate: CLLocationCoordinate2D, name: String = "Destination") -> URL? {
